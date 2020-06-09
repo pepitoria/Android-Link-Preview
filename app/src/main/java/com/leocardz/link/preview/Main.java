@@ -1,12 +1,11 @@
 package com.leocardz.link.preview;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,6 +21,9 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import com.koushikdutta.urlimageviewhelper.UrlImageViewCallback;
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
@@ -34,12 +36,10 @@ import java.util.Random;
 
 
 @SuppressWarnings("unused")
-public class Main extends ActionBarActivity {
+public class Main extends Activity {
 
     private EditText editText, editTextTitlePost, editTextDescriptionPost;
     private Button submitButton, postButton, randomButton;
-
-    private Context context;
 
     private TextCrawler textCrawler;
     private ViewGroup dropPreview, dropPost;
@@ -55,11 +55,35 @@ public class Main extends ActionBarActivity {
     private int countBigImages = 0;
     private boolean noThumb;
 
+    private static final int PERMISSION_REQUEST_CODE = 2134;
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_REQUEST_CODE:
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 &&
+                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission is granted. Continue the action or workflow
+                    // in your app.
+                    Toast.makeText(this, "restart app", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Explain to the user that the feature is unavailable because
+                    // the features requires a permission that the user has denied.
+                    // At the same time, respect the user's decision. Don't link to
+                    // system settings in an effort to convince the user to change
+                    // their decision.
+                }
+                return;
+        }
+        // Other 'case' lines to check for other
+        // permissions this app might request.
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        context = this;
 
         setContentView(R.layout.main);
 
@@ -194,7 +218,7 @@ public class Main extends ActionBarActivity {
                     descriptionTextView.setVisibility(View.GONE);
 
                 urlTextView.setText(currentCannonicalUrl);
-                
+
                 final String currentUrlLocal = currentUrl;
 
                 mainView.setOnClickListener(new OnClickListener() {
@@ -608,17 +632,17 @@ public class Main extends ActionBarActivity {
      * Just a set of urls
      */
     private final String[] RANDOM_URLS = {
-            "http://vnexpress.net/ ",
-            "http://facebook.com/ ",
-            "http://gmail.com",
-            "http://goo.gl/jKCPgp",
-            "http://www3.nhk.or.jp/",
-            "http://habrahabr.ru",
-            "http://www.youtube.com/watch?v=cv2mjAgFTaI",
-            "http://vimeo.com/67992157",
+            "https://vnexpress.net/ ",
+            "https://facebook.com/ ",
+            "https://gmail.com",
+            "https://goo.gl/jKCPgp",
+            "https://www3.nhk.or.jp/",
+            "https://habrahabr.ru",
+            "https://www.youtube.com/watch?v=cv2mjAgFTaI",
+            "https://vimeo.com/67992157",
             "https://lh6.googleusercontent.com/-aDALitrkRFw/UfQEmWPMQnI/AAAAAAAFOlQ/mDh1l4ej15k/w337-h697-no/db1969caa4ecb88ef727dbad05d5b5b3.jpg",
-            "http://www.nasa.gov/", "http://twitter.com",
-            "http://bit.ly/14SD1eR"};
+            "https://www.nasa.gov/", "https://twitter.com",
+            "https://bit.ly/14SD1eR"};
 
     /**
      * Returns a random url

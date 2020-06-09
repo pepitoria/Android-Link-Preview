@@ -1,7 +1,7 @@
 package com.leocardz.link.preview.library;
 
 import android.os.AsyncTask;
-import android.support.test.runner.AndroidJUnit4;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
